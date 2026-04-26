@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Edit(*)",
+      "Write(*)",
+      "Bash(launchctl list *)",
+      "Bash(pip list *)",
+      "Bash(pip show *)",
+      "Bash(sw_vers *)",
+      "Bash(sqlite3 ~/Library/Messages/chat.db *)"
+    ]
+  }
+}

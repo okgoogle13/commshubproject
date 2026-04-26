@@ -1,50 +1,76 @@
-# ### FILE: commshubproject/src/drafter.py
 import os
 import json
-import yaml
 import google.generativeai as genai
+
+_SYSTEM_PROMPT = """You are the Comms Hub drafting assistant for a neurodivergent adult in Melbourne who loves their parents deeply but experiences communication paralysis.
+
+Your job: given an inbound iMessage (already PII-redacted), produce three reply drafts in the operator's authentic voice.
+
+VOICE RULES (non-negotiable):
+1. Write like a tired, loving adult child texting parents from Melbourne
+2. Never use formal openers ("I hope this finds you well", "Dear Mum and Dad")
+3. Never use formal sign-offs ("Warm regards", "Best")
+4. Always end with "xx"
+5. Use "🙈" sparingly for self-deprecating moments only; no other emoji
+6. Never explain ADHD/neurodivergence directly
+7. Never promise specific call times unless operator has confirmed it
+8. Never apologize more than once per message
+9. Minimal=1 sentence (zero energy), Honest=2-3 sentences (low energy), Practical Re-entry=<100 words (medium energy)
+10. Prefer short messages overall
+11. Fill [insert X] with inbound context, or mark [FILL IN]
+
+HARD STOPS — never include these phrases:
+- "I'm so sorry for..." / "I promise I'll..." / "I feel terrible that..." / "You must think..."
+- "I've been really struggling with..." / "I'm the worst" / "I'm such a bad [child/person]"
+- Formal closings: "Warmly," "Best," "Kind regards,"
+- Specific day+time commitments (e.g. "I'll call Sunday at 7pm")
+
+INPUT: JSON with keys: redacted_text, silence_days, contact_token
+OUTPUT: Return ONLY valid JSON, no markdown fences, no preamble:
+{"minimal": "...", "honest": "...", "practical_reentry": "..."}"""
+
 
 class Drafter:
     def __init__(self):
         api_key = os.environ.get("GEMINI_API_KEY", "")
         if api_key:
             genai.configure(api_key=api_key)
-        self.model = genai.GenerativeModel('gemini-2.0-flash')
-
-    def load_rules(self):
-        try:
-            with open("config/voice_rules.md", "r") as f:
-                return f.read()
-        except FileNotFoundError:
-            return "- Be concise, professional but warm."
-
-    def draft_reply(self, message_text, persona="default"):
-        rules = self.load_rules()
-        prompt = (
-            f"You are the Comms Hub drafting assistant. Follow the Voice Rules exactly.\n\n"
-            f"Given the inbound message below, produce three reply drafts: minimal, honest, and practical_reentry.\n\n"
-            f"Voice Rules:\n{rules}\n\n"
-            f"Inbound message: {message_text}\n\n"
-            f"Return ONLY valid JSON with exactly these keys: \"minimal\", \"honest\", \"practical_reentry\".\n"
-            f"No extra text, no markdown fences."
+        self.model = genai.GenerativeModel(
+            model_name="gemini-3.1-pro-preview",
+            system_instruction=_SYSTEM_PROMPT,
         )
+
+    def draft_reply(self, redacted_text, silence_days=0, contact_token="UNKNOWN"):
+        payload = json.dumps({
+            "redacted_text": redacted_text,
+            "silence_days": silence_days,
+            "contact_token": contact_token,
+        })
         try:
-            response = self.model.generate_content(prompt)
-            output = response.text
+            response = self.model.generate_content(payload)
+            output = response.text.strip()
             if "```json" in output:
                 output = output.split("```json")[1].split("```")[0].strip()
             elif "```" in output:
                 output = output.split("```")[1].split("```")[0].strip()
-                
-            draft_json = json.loads(output)
+            parsed = json.loads(output)
             return {
-                "minimal": draft_json.get("minimal", "Error generating minimal draft"),
-                "honest": draft_json.get("honest", "Error generating honest draft"),
-                "practical_reentry": draft_json.get("practical_reentry", "Error generating practical_reentry draft")
+                "minimal": parsed.get("minimal", "[FILL IN]"),
+                "honest": parsed.get("honest", "[FILL IN]"),
+                "practical_reentry": parsed.get("practical_reentry", "[FILL IN]"),
+                "tone_warnings": parsed.get("tone_warnings", []),
+                "promise_warnings": parsed.get("promise_warnings", []),
+                "confidence": parsed.get("confidence", "low"),
+                "confidence_reason": parsed.get("confidence_reason", ""),
             }
         except Exception as e:
+            error = f"Error drafting reply: {e}"
             return {
-                "minimal": f"Error drafting reply: {str(e)}",
-                "honest": f"Error drafting reply: {str(e)}",
-                "practical_reentry": f"Error drafting reply: {str(e)}"
+                "minimal": error,
+                "honest": error,
+                "practical_reentry": error,
+                "tone_warnings": [],
+                "promise_warnings": [],
+                "confidence": "low",
+                "confidence_reason": str(e),
             }
