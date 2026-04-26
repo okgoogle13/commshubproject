@@ -1,4 +1,10 @@
-### FILE: commshubproject/config/digest_schedule.yaml
-digest_times:
-  - "09:00"
-  - "17:00"
+digest:
+  times:
+    - "09:00"
+    - "13:00"
+    - "18:00"
+    - "21:00"
+  timezone: Australia/Melbourne
+
+watcher:
+  poll_interval_minutes: 60

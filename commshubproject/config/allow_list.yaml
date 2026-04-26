@@ -1,7 +1,15 @@
-### FILE: commshubproject/config/allow_list.yaml
-allowed_contacts:
-  - "Mum"
-  - "Dad"
-  - "Partner"
-  - "Sibling"
-  - "Operator"
+operator:
+  imessage_handle: jonas.dougall@icloud.com
+  timezone: Australia/Melbourne
+  install_path: /Users/okgoogle13/Projects/commshubproject
+
+allow_list:
+  - name: Molly Dougall
+    token: MUM
+    imessage_handle: molly.dougall@icloud.com
+    role: mother
+
+  - name: Daddy Dougall
+    token: DAD
+    imessage_handle: drarvindougall@gmail.com
+    role: father
