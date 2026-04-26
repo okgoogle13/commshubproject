@@ -1,0 +1,7 @@
+### FILE: commshubproject/config/allow_list.yaml
+allowed_contacts:
+  - "Mum"
+  - "Dad"
+  - "Partner"
+  - "Sibling"
+  - "Operator"

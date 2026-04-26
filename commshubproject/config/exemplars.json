@@ -1,0 +1,15 @@
+### FILE: commshubproject/config/exemplars.json
+{
+  "informal": [
+    {
+      "input": "Hey, running late!",
+      "output": "No worries, see you when you get here."
+    }
+  ],
+  "formal": [
+    {
+      "input": "Please review the document by EOD.",
+      "output": "Understood. I will have it reviewed by EOD."
+    }
+  ]
+}
