@@ -15,6 +15,7 @@ def main():
     parser = argparse.ArgumentParser(description="Comms Hub CLI agent.")
     parser.add_argument("--fetch", action="store_true", help="Fetch recent messages from chat.db")
     parser.add_argument("--test-draft", type=str, help="Run a test draft workflow for a given snippet")
+    parser.add_argument("--persona", type=str, default="default", help="Voice persona style to use")
     parser.add_argument("--send", type=str, help="Phone number to send a test message to")
     parser.add_argument("--body", type=str, help="Message body for sending")
     
@@ -35,11 +36,20 @@ def main():
         print(f"Redacted Text: {safe_text}")
         
         drafter = Drafter()
-        draft = drafter.draft_reply(safe_text)
-        print(f"Generated Draft: {draft}")
+        drafts = drafter.draft_reply(safe_text, persona=args.persona)
+        
+        print("\nGenerated Drafts:")
+        print(f"[1] Minimal: {drafts.get('minimal', '')}")
+        print(f"[2] Honest: {drafts.get('honest', '')}")
+        print(f"[3] Practical Re-entry: {drafts.get('practical_reentry', '')}")
+        
+        print("\n[1] Minimal  [2] Honest  [3] Practical Re-entry  [e] Edit manually")
+        # In a real CLI we would process input here
         
         linter = Linter()
-        lint_result = linter.check_draft(draft)
+        # Linting all drafts combined or individually. For simplicity, just run on one or all
+        combined_text = f"{drafts.get('minimal')} {drafts.get('honest')} {drafts.get('practical_reentry')}"
+        lint_result = linter.check_draft(combined_text)
         if lint_result["passed"]:
             print("Linter: PASS")
         else:

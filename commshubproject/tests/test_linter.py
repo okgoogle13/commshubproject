@@ -9,9 +9,9 @@ def test_linter_shame_cascade():
 
 def test_linter_unverified_promise():
     linter = Linter()
-    res = linter.check_draft("I promise to have it done.")
+    res = linter.check_draft("I promise I'll have it done.")
     assert not res["passed"]
-    assert "UNVERIFIED PROMISE" in res["flags"]
+    assert "I promise I'll" in res["flags"]
 
 def test_linter_clean():
     linter = Linter()

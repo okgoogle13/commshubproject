@@ -4,14 +4,19 @@ class Linter:
         self.forbidden_patterns = [
             "SHAME CASCADE",
             "UNVERIFIED PROMISE",
-            "I'm so sorry",
-            "I will absolutely",
-            "I promise"
+            "I'm so sorry for",
+            "I promise I'll",
+            "I feel terrible that",
+            "You must think",
+            "I've been really struggling with",
+            "Warmly",
+            "Best",
+            "Kind regards"
         ]
 
     def check_draft(self, draft_text):
         flags = []
-        lower_draft = draft_text.lower()
+        lower_draft = str(draft_text).lower()
         for pattern in self.forbidden_patterns:
             if pattern.lower() in lower_draft:
                 flags.append(pattern)

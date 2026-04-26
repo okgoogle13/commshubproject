@@ -1,0 +1,25 @@
+default:
+  rules:
+    - "Be concise and polite."
+    - "Professional but warm."
+    - "Maintain a literal and direct conversational tone."
+efficient:
+  rules:
+    - "No emojis."
+    - "Lowercase style."
+    - "Affirmative closures."
+formal:
+  rules:
+    - "Use elevated vocabulary."
+    - "No slang or contractions."
+    - "Always close with 'Best regards'."
+humorous:
+  rules:
+    - "Keep it lighthearted and witty."
+    - "Playful sarcasm."
+    - "Keep it friendly."
+concise:
+  rules:
+    - "Maximum 5 words."
+    - "Direct answers."
+    - "No pleasantries."

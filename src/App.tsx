@@ -3,7 +3,39 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { useState } from 'react';
+
+const PERSONAS: Record<string, { label: string; rules: string[]; draft: string; output: string }> = {
+  efficient: {
+    label: "Efficient / Dry",
+    rules: ["- No emojis", "- Lowercase style", "- Affirmative closures"],
+    draft: "i'll be there for dinner. will bring the laundry as requested. see you Sunday. thanks.",
+    output: "persona_efficient_v2"
+  },
+  formal: {
+    label: "Formal",
+    rules: ["- Elevated vocabulary", "- No slang/contractions", "- Polite closing"],
+    draft: "I will certainly attend dinner on Sunday, and I shall bring the laundry from the specified address. Best regards.",
+    output: "persona_formal_v1"
+  },
+  humorous: {
+    label: "Humorous",
+    rules: ["- Lighthearted/witty", "- Playful sarcasm", "- Keep it friendly"],
+    draft: "Sunday dinner? I thought you'd never ask. Expect me and a mountain of laundry. Prepare yourselves!",
+    output: "persona_humorous"
+  },
+  concise: {
+    label: "Concise",
+    rules: ["- Max 5 words", "- Direct answers", "- No pleasantries"],
+    draft: "Yes. Bringing laundry.",
+    output: "persona_concise"
+  }
+};
+
 export default function App() {
+  const [activePersona, setActivePersona] = useState<keyof typeof PERSONAS>('efficient');
+  const personaData = PERSONAS[activePersona];
+
   return (
     <div className="min-h-screen bg-black flex items-center justify-center p-4">
       <div className="w-full max-w-[1024px] h-[768px] bg-[#0A0A0B] text-gray-300 font-sans p-6 overflow-hidden flex flex-col border-4 border-[#1A1A1C] rounded-xl shadow-2xl">
@@ -67,13 +99,23 @@ export default function App() {
                 </div>
               </div>
             </div>
-            <div className="bg-[#141417] rounded-lg p-4 border border-gray-800 h-40">
-              <h3 className="text-xs font-semibold text-gray-400 uppercase mb-2">Voice Persona</h3>
-              <div className="text-xs font-mono leading-relaxed">
-                <p className="text-sky-500">- Efficient / Dry</p>
-                <p className="text-gray-500">- No emojis</p>
-                <p className="text-gray-500">- Lowercase style</p>
-                <p className="text-gray-500">- Affirmative closures</p>
+            <div className="bg-[#141417] rounded-lg p-4 border border-gray-800 flex flex-col min-h-[160px]">
+              <h3 className="text-xs font-semibold text-gray-400 uppercase mb-2 flex justify-between items-center">
+                Voice Persona
+                <select 
+                  className="bg-black border border-gray-800 text-sky-500 rounded px-2 py-0.5 text-[10px] outline-none"
+                  value={activePersona}
+                  onChange={(e) => setActivePersona(e.target.value)}
+                >
+                  {Object.entries(PERSONAS).map(([key, p]) => (
+                    <option key={key} value={key}>{p.label}</option>
+                  ))}
+                </select>
+              </h3>
+              <div className="text-xs font-mono leading-relaxed mt-2">
+                {personaData.rules.map((rule, idx) => (
+                  <p key={idx} className={idx === 0 ? "text-sky-500" : "text-gray-500"}>{rule}</p>
+                ))}
               </div>
             </div>
           </aside>
@@ -108,7 +150,7 @@ export default function App() {
                       JSON_MODE
                     </div>
                     <p className="text-sm text-white italic leading-relaxed">
-                      "i'll be there for dinner. will bring the laundry as requested. see you Sunday. thanks."
+                      "{personaData.draft}"
                     </p>
                   </div>
                 </div>
@@ -140,11 +182,11 @@ export default function App() {
                 <p className="text-gray-600 italic">[INFO] Fetching latest from chat.db...</p>
                 <p>[WATCHER] 1 new message from 'Mum'</p>
                 <p>[REDACTOR] Scrubbing PII: Address removed.</p>
-                <p>[DRAFTER] Gemini context: persona_efficient_v2</p>
+                <p>[DRAFTER] Gemini context: {personaData.output}</p>
                 <p>[LINTER] Checking for 'SHAME CASCADE'... Not found.</p>
                 <p>[LINTER] Checking for 'UNVERIFIED PROMISE'... Not found.</p>
                 <p className="text-white font-bold py-1">
-                  Draft: "i'll be there for dinner. will bring the laundry as requested. see you Sunday. thanks."
+                  Draft: "{personaData.draft}"
                 </p>
                 <p>
                   <span className="text-sky-500 uppercase font-bold">{"[SEND? (Y/N/Edit)]:"}</span>{" "}

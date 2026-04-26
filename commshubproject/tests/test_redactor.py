@@ -9,6 +9,7 @@ def test_redactor_names():
 
 def test_redactor_pii():
     redactor = Redactor()
-    res = redactor.redact("My number is 555-019-9234 and postcode is SW1A 1AA.")
+    res = redactor.redact("My number is 0412 345 678 and postcode is 3070 at 42 Wallaby Way.")
     assert "[REDACTED_PHONE]" in res
     assert "[REDACTED_POSTCODE]" in res
+    assert "[REDACTED_ADDRESS]" in res
