@@ -1,6 +1,6 @@
 import os
 import json
-import google.generativeai as genai
+from google import genai
 
 _SYSTEM_PROMPT = """You are the Comms Hub drafting assistant for a neurodivergent adult in Melbourne who loves their parents deeply but experiences communication paralysis.
 
@@ -34,11 +34,10 @@ class Drafter:
     def __init__(self):
         api_key = os.environ.get("GEMINI_API_KEY", "")
         if api_key:
-            genai.configure(api_key=api_key)
-        self.model = genai.GenerativeModel(
-            model_name="gemini-3.1-pro-preview",
-            system_instruction=_SYSTEM_PROMPT,
-        )
+            self.client = genai.Client(api_key=api_key)
+        else:
+            self.client = genai.Client()
+        self.model_name = "gemini-3.1-pro-preview"
 
     def draft_reply(self, redacted_text, silence_days=0, contact_token="UNKNOWN"):
         payload = json.dumps({
@@ -47,7 +46,13 @@ class Drafter:
             "contact_token": contact_token,
         })
         try:
-            response = self.model.generate_content(payload)
+            response = self.client.models.generate_content(
+                model=self.model_name,
+                contents=payload,
+                config=genai.types.GenerateContentConfig(
+                    system_instruction=_SYSTEM_PROMPT,
+                ),
+            )
             output = response.text.strip()
             if "```json" in output:
                 output = output.split("```json")[1].split("```")[0].strip()

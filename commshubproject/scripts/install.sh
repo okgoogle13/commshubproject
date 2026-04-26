@@ -53,7 +53,7 @@ fi
 
 # 7. Check Full Disk Access
 echo "[CHECK] Verifying Full Disk Access for Messages..."
-bash "$INSTALL_PATH/../scripts/fda_check.sh"
+bash "$INSTALL_PATH/scripts/fda_check.sh"
 if [ $? -ne 0 ]; then
   echo ""
   echo "ACTION REQUIRED: Grant Full Disk Access to Terminal"
@@ -73,7 +73,7 @@ fi
 # 9. Install launchd plists with env var substitution
 mkdir -p "$LAUNCH_AGENTS"
 for AGENT in watcher digest; do
-  SRC="$INSTALL_PATH/../launchd/com.commshub.$AGENT.plist"
+  SRC="$INSTALL_PATH/launchd/com.commshub.$AGENT.plist"
   DST="$LAUNCH_AGENTS/com.commshub.$AGENT.plist"
   # Substitute PLACEHOLDER_SET_IN_ENV with actual values
   sed "s/PLACEHOLDER_SET_IN_ENV/$GEMINI_API_KEY/g" "$SRC" > "$DST.tmp"
