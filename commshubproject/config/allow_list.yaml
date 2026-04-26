@@ -8,8 +8,14 @@ allow_list:
     token: MUM
     imessage_handle: molly.dougall@icloud.com
     role: mother
+    aliases:
+      - Mum
+      - Molly
 
   - name: Daddy Dougall
     token: DAD
     imessage_handle: drarvindougall@gmail.com
     role: father
+    aliases:
+      - Dad
+      - Arvind
