@@ -4,11 +4,13 @@ import subprocess
 
 def _send_via_applescript(handle, body):
     """Send an iMessage using osascript directly — no macpymessenger dependency."""
+    safe_handle = handle.replace("\\", "\\\\").replace('"', '\\"')
+    safe_body = body.replace("\\", "\\\\").replace('"', '\\"')
     script = f'''
 tell application "Messages"
     set targetService to 1st service whose service type = iMessage
-    set targetBuddy to buddy "{handle}" of targetService
-    send "{body}" to targetBuddy
+    set targetBuddy to buddy "{safe_handle}" of targetService
+    send "{safe_body}" to targetBuddy
 end tell
 '''
     result = subprocess.run(["osascript", "-e", script], capture_output=True, text=True)
