@@ -5,3 +5,5 @@ pytest>=8.0
 python-dotenv>=1.0
 imessage-reader>=0.6.1
 macpymessenger>=0.2.0
+fastapi>=0.111.0
+uvicorn>=0.29.0

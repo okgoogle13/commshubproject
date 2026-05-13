@@ -21,7 +21,26 @@
       "Bash(rm *)",
       "Bash(launchctl *)",
       "Bash(sw_vers *)",
-      "Bash(sqlite3 ~/Library/Messages/chat.db *)"
+      "Bash(sqlite3 ~/Library/Messages/chat.db *)",
+      "Read(//usr/local/Cellar/python@3.13/3.13.5/Frameworks/Python.framework/Versions/3.13/bin/**)",
+      "Bash(xargs -I{} basename {})",
+      "Bash(./venv/bin/python -c \"import yaml; print\\(yaml.__version__\\)\")",
+      "Bash(./venv/bin/python -c \"import yaml; d=yaml.safe_load\\(open\\('commshubproject/config/allow_list.yaml'\\)\\); print\\([e['imessage_handle'] for e in d['allow_list']]\\)\")",
+      "Bash(./venv/bin/python -c \"import yaml; d=yaml.safe_load\\(open\\('config/allow_list.yaml'\\)\\); print\\([e['imessage_handle'] for e in d['allow_list']]\\)\")",
+      "Bash(./venv/bin/pip install *)",
+      "Bash(./venv/bin/python -c \"import fastapi, uvicorn; print\\('deps ok'\\)\")",
+      "Bash(./venv/bin/python -c \"from commshub_bridge import app; print\\('import ok'\\)\")",
+      "Bash(./venv/bin/uvicorn commshub_bridge:app --host 127.0.0.1 --port 8765)",
+      "Bash(curl -s -w \"\\\\nHTTP %{http_code}\" http://127.0.0.1:8765/health)",
+      "Bash(curl -s -w '\\\\nHTTP %{http_code}' -X POST http://127.0.0.1:8765/send-message -H 'Content-Type: application/json' -d '{\"handle\":\"notallowed@example.com\",\"message\":\"hi\",\"mode\":\"test\"}')",
+      "Bash(curl -s -w '\\\\nHTTP %{http_code}' -X POST http://127.0.0.1:8765/send-message -H 'Content-Type: application/json' -d '{\"handle\":\"molly.dougall@icloud.com\",\"message\":\"  \",\"mode\":\"test\"}')",
+      "Read(//Users/okgoogle13/**)",
+      "Bash(bash scripts/fda_check.sh)",
+      "Bash(echo \"exit: $?\")",
+      "Bash(curl -s -w '\\\\nHTTP %{http_code}' -X POST http://127.0.0.1:8765/send-message -H 'Content-Type: application/json' -d '{\"recipient\":\"lucy\",\"handle\":\"gunner.lucy@gmail.com\",\"message\":\"Test from Comms Hub — ignore this.\",\"mode\":\"initiate\"}')",
+      "Bash(pkill -f \"uvicorn commshub_bridge\")",
+      "Bash(echo \"killed: $?\")",
+      "Read(//private/tmp/**)"
     ]
   }
 }
