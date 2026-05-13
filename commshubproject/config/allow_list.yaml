@@ -14,7 +14,7 @@ allow_list:
 
   - name: Daddy Dougall
     token: DAD
-    imessage_handle: drarvindougall@gmail.com
+    imessage_handle: drarvinddougall@gmail.com
     role: father
     aliases:
       - Dad

@@ -31,13 +31,15 @@ OUTPUT: Return ONLY valid JSON, no markdown fences, no preamble:
 
 
 class Drafter:
-    def __init__(self):
-        api_key = os.environ.get("GEMINI_API_KEY", "")
-        if api_key:
-            self.client = genai.Client(api_key=api_key)
-        else:
-            self.client = genai.Client()
-        self.model_name = "gemini-3.1-pro-preview"
+    def __init__(self, api_key=None):
+        key = api_key or os.environ.get("GEMINI_API_KEY", "")
+        if not key:
+            raise ValueError(
+                "[DRAFTER] No GEMINI_API_KEY found. "
+                "Set it in commshubproject/.env before running."
+            )
+        self.client = genai.Client(api_key=key)
+        self.model_name = "gemini-2.5-pro"
 
     def draft_reply(self, redacted_text, silence_days=0, contact_token="UNKNOWN"):
         payload = json.dumps({
