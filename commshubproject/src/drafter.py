@@ -1,6 +1,6 @@
 import os
 import json
-from google import genai
+import anthropic
 
 _SYSTEM_PROMPT = """You are the Comms Hub drafting assistant for a neurodivergent adult in Melbourne who loves their parents deeply but experiences communication paralysis.
 
@@ -32,14 +32,14 @@ OUTPUT: Return ONLY valid JSON, no markdown fences, no preamble:
 
 class Drafter:
     def __init__(self, api_key=None):
-        key = api_key or os.environ.get("GEMINI_API_KEY", "")
+        key = api_key or os.environ.get("ANTHROPIC_API_KEY", "")
         if not key:
             raise ValueError(
-                "[DRAFTER] No GEMINI_API_KEY found. "
+                "[DRAFTER] No ANTHROPIC_API_KEY found. "
                 "Set it in commshubproject/.env before running."
             )
-        self.client = genai.Client(api_key=key)
-        self.model_name = "gemini-2.5-pro"
+        self.client = anthropic.Anthropic(api_key=key)
+        self.model_name = "claude-sonnet-4-6"
 
     def draft_reply(self, redacted_text, silence_days=0, contact_token="UNKNOWN"):
         payload = json.dumps({
@@ -48,14 +48,13 @@ class Drafter:
             "contact_token": contact_token,
         })
         try:
-            response = self.client.models.generate_content(
+            response = self.client.messages.create(
                 model=self.model_name,
-                contents=payload,
-                config=genai.types.GenerateContentConfig(
-                    system_instruction=_SYSTEM_PROMPT,
-                ),
+                max_tokens=1024,
+                system=_SYSTEM_PROMPT,
+                messages=[{"role": "user", "content": payload}]
             )
-            output = response.text.strip()
+            output = response.content[0].text.strip()
             if "```json" in output:
                 output = output.split("```json")[1].split("```")[0].strip()
             elif "```" in output:
