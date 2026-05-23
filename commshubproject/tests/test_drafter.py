@@ -19,7 +19,7 @@ def _mock_response(text):
 
 def test_drafter_model_name():
     drafter = _make_drafter()
-    assert "claude" in drafter.model_name
+    assert drafter.model_name == "claude-sonnet-4-6"
 
 
 def test_drafter_returns_three_modes():

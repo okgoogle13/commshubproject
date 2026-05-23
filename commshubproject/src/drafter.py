@@ -27,7 +27,7 @@ HARD STOPS — never include these phrases:
 
 INPUT: JSON with keys: redacted_text, silence_days, contact_token
 OUTPUT: Return ONLY valid JSON, no markdown fences, no preamble:
-{"minimal": "...", "honest": "...", "practical_reentry": "..."}"""
+{"minimal": "...", "honest": "...", "practical_reentry": "...", "tone_warnings": [...], "promise_warnings": [...], "confidence": "low|medium|high", "confidence_reason": "..."}"""
 
 
 class Drafter:
