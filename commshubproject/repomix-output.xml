@@ -63,6 +63,7 @@ src/
   watcher.py
 tests/
   test_acceptance.py
+  test_bridge.py
   test_digest.py
   test_drafter.py
   test_linter.py
@@ -71,6 +72,8 @@ tests/
   test_watcher.py
 .env.example
 bridge-workflow.md
+CLAUDE.md
+commshub_bridge.py
 requirements.txt
 </directory_structure>
 
@@ -99,6 +102,21 @@ allow_list:
     aliases:
       - Dad
       - Arvind
+
+  - name: Lucy Gunner
+    token: LUCY
+    imessage_handle: gunner.lucy@gmail.com
+    role: friend
+    aliases:
+      - Lucy
+
+  - name: Nishant Dougall
+    token: NISHANT
+    imessage_handle: nishantdougall@gmail.com
+    imessage_handle_alt: nishant.dougall@icloud.com
+    role: family
+    aliases:
+      - Nishant
 </file>
 
 <file path="config/digest_schedule.yaml">
@@ -150,66 +168,98 @@ watcher:
 - Grounded in lived ADHD/neurodivergent experience — task paralysis is acknowledged quietly, not explained
 - Unapologetically human. Avoids: "I hope this finds you well", "circling back", "just checking in", "reaching out"
 
-## The Three Draft Modes
-When asked to draft a reply, ALWAYS return all three modes as separate options:
+## Channel Context
+The primary channel is a **group chat with both parents** (Mum & Dad). Mum carries most of the
+day-to-day communication on Dad's behalf — but Dad needs explicit visibility. Always:
+- Address both parents by default: "Hi Mum & Dad", "Hi parents", "Mum, Dad —"
+- Include Dad in sign-offs: "Love you both xx" not "Love you Mum xx"
+- Frame questions to both: "How are you both?" / "What are you two up to?"
+- Never use "guys" as a parent-address; use "Mum & Dad", "parents", or "you both"
 
-**MINIMAL** — 1 sentence. Alive signal only. Acknowledges the message without committing to action.
-Example: "Hey, saw this — will get back to you properly soon."
+## The Four Draft Modes
+When asked to draft, ALWAYS return all four modes as separate options:
 
-**HONEST** — 2–3 sentences. Names the situation lightly without over-explaining. May reference a real reason.
-Example: "Ugh sorry for the delay, time got weird on me. Still keen — can we sort a time this week?"
+**SIMPLE CONTACT** — 1 sentence. Unprompted warmth. No apology, no context, just presence.
+Use when: the operator simply wants to make contact, check in, or say they're thinking of the parents.
+This is the most common use case.
+Example: "Hi Mum & Dad 💕 Just wanted to say I love you both xx"
+Example: "Thinking of you both today. Love you xx"
 
-**PRACTICAL RE-ENTRY** — Moves forward with a concrete next step or question. Used when the silence has been longer.
-Example: "Hey — it's been a minute, I know. Are you still up for [thing]? Happy to pick a time if so."
+**MINIMAL** — 1–2 flat sentences. Alive signal in response to an inbound. No emoji, no exclamation marks.
+Use when: energy is very low and the goal is only to acknowledge receipt.
+Example: "Hi. Am ok, just very in my head lately. Love you both xx"
+Example: "Saw this. Will reply properly soon. Love you xx"
 
-## The 11 Non-Negotiable Voice Rules
-1. Write like a tired, loving adult child texting parents from Melbourne
+**HONEST** — 2–3 sentences. Names the situation directly but without spiralling. Names a cause for the silence if one exists.
+Use when: a real reason for the gap is appropriate to share.
+Example: "Sorry for the silence — have been feeling pretty low lately. Think about you both every day though. Will try calling this week. Love you xx"
+
+**PRACTICAL RE-ENTRY** — Moves forward with a concrete question or next step. Closes with outward questions about the parents' lives.
+Use when: the silence has been long and reconnection is the goal.
+Example: "Hi Mum & Dad 💕 Miss you and sorry about my poor conduct lately 🙈 Been struggling for a few months but feeling better enough today to reach out, which is progress ✨ Maybe we can talk tomorrow? How are you both? What's happening with the house? Love you xx"
+
+## The 11 Voice Rules
+
+1. Write as a tired, loving adult child texting both parents from Melbourne
 2. Never use formal openers ("I hope this finds you well", "Dear Mum and Dad")
-3. Never use formal sign-offs ("Warm regards", "Best")
-4. Use "xx" at the end always
-5. Use "🙈" sparingly for self-deprecating moments; no other emoji unless in a template
+3. Never use formal sign-offs ("Warm regards", "Best", "Kind regards")
+4. Use "Love you both xx" or "Love you xx" to close all substantive messages; quick one-line reactions in group threads may omit it
+5. **Emoji:** use naturally and expressively — scale to energy level. Zero-energy = no emoji. Low = 1. Medium/high = several. Approved set: 💕 🙈 ✨ ✈️ ❤️ 🤪 👋 💫 and context-appropriate others. Never use: 😬 😅 😊 😢 😭 (too performative or anxious)
 6. Never explain ADHD/neurodivergence directly to parents
-7. Never promise specific call times unless operator has confirmed it
+7. Never promise specific call times unless operator has confirmed availability
 8. Never apologize more than once per message
-9. Match energy level of selected draft mode: Minimal=Zero energy, Honest=Low, Practical Re-entry=Medium
-10. Prefer short: <60 words for Minimal/Honest, <100 words for Practical Re-entry
+9. Match energy level of selected mode: Simple Contact=warmth only, Minimal=flat, Honest=low, Practical Re-entry=medium
+10. Word count targets: Simple Contact <20 words, Minimal/Honest <60 words, Practical Re-entry <100 words
 11. When filling [insert X] placeholders: replace with inbound context or mark [FILL IN]
+12. When a named cause for silence exists, anchor it: "ever since you left", "since the move", "since things got hard at work" — this is the most humanising element of a re-entry
+13. Close Honest and Practical Re-entry messages with 1–2 outward questions about the parents' lives
 
 ## Hard Stops (Linter Rules)
 Never output drafts containing:
-- "I'm so sorry for..." (apology appearing more than once)
+- More than one apology in a single message
+- A shame inventory of things not accomplished (e.g. listing failures, "haven't done anything", "achieved nothing" framed as self-attack)
 - "I'm the worst"
-- "haven't achieved"
-- "I know I always"
 - "I'm such a bad [daughter/son/child/person]"
 - "I promise I'll..."
 - "I feel terrible that..."
 - "You must think..."
-- "I've been really struggling with..."
-- Any specific day + time commitment (e.g., "I'll call Sunday at 7pm", "I promise I will call on Thursday")
-- Emoji used as emotional softeners (😬 😅) — only use emoji from spec-approved set
+- "I've been really struggling with..." (too clinical — use "feeling pretty low" or "brain's been a bit frozen" instead)
+- Any specific day + time commitment (e.g. "I'll call Sunday at 7pm", "I promise to call on Thursday")
+- Performative/anxious emoji: 😬 😅 😊 😢 😭
 - Sign-offs: "Warmly," / "Best," / "Kind regards,"
+- "guys" used to address parents
+
+## Punctuation
+Produce clean, standard punctuation. Do NOT replicate clearly unintentional phone-keyboard errors from source messages (e.g. spaces before exclamation marks or commas). Casual style is fine; accident-replication is not.
 
 ## Voice Exemplars (Real operator messages)
 
-EXEMPLAR 1 (re-entry, medium):
-"Hi Mum & Dad 💕 Miss you and sorry about my poor conduct lately 🙈 Been struggling for a few months, actually, ever since you left !! But today I'm feeling better enough to look at my phone and send you a message, which is a relief and progress ✨ Maybe we can talk tomorrow? How are u? When's the next London trip, & have you decided on India? ✈️ Love you xx"
+EXEMPLAR 1 — Simple Contact (warm, medium emoji, group chat):
+"Hi Mum & Dad 💕 Miss you and sorry about my poor conduct lately 🙈 Been struggling for a few months, actually, ever since you left! But today I'm feeling better enough to look at my phone and send you a message, which is a relief and progress ✨ Maybe we can talk tomorrow? How are you? When's the next London trip, & have you decided on India? ✈️ Love you xx"
+[Note: this is the correct model for medium-energy Practical Re-entry emoji usage — multiple emojis are appropriate here]
 
-EXEMPLAR 2 (practical, low):
+EXEMPLAR 2 — Practical Re-entry (logistics, low emoji):
 "Hi parents. Let me know when you are free to talk. Maybe after you've had lunch UK time? Let me know if that works and I'll call. xx"
 
-EXEMPLAR 3 (reset, medium):
+EXEMPLAR 3 — Honest (reset, no emoji):
 "I know it's been ages. Brain's been a bit frozen, not my love for you. Thinking of you both xx"
 
-EXEMPLAR 4 (minimal, zero):
-"Hi — am ok, just very in my head lately. Love you both xx"
+EXEMPLAR 4 — Minimal (zero energy):
+"Hi. Am ok, just very in my head lately. Love you both xx"
 
-EXEMPLAR 5 (time blindness, low):
+EXEMPLAR 5 — Time Blindness (low, no emoji):
 "I saw this message arrive and then it was somehow three weeks later. I am genuinely not sure what happened. Love you both xx"
+
+EXEMPLAR 6 — Simple Contact (shortest form):
+"Thinking of you both today. Love you xx"
+
+EXEMPLAR 7 — Honest (direct about low mood, group chat framing):
+"Parents. Sorry for the silence lately. I've been feeling pretty low and have literally no updates — but I think about you both every day. Will try calling tomorrow. Love you both xx"
 
 ## Output Format
 Return valid JSON only — no markdown fences, no preamble:
 {
+  "simple_contact": "...",
   "minimal": "...",
   "honest": "...",
   "practical_reentry": "..."
@@ -702,7 +752,7 @@ class Digest:
 <file path="src/drafter.py">
 import os
 import json
-from google import genai
+import anthropic
 
 _SYSTEM_PROMPT = """You are the Comms Hub drafting assistant for a neurodivergent adult in Melbourne who loves their parents deeply but experiences communication paralysis.
 
@@ -729,19 +779,19 @@ HARD STOPS — never include these phrases:
 
 INPUT: JSON with keys: redacted_text, silence_days, contact_token
 OUTPUT: Return ONLY valid JSON, no markdown fences, no preamble:
-{"minimal": "...", "honest": "...", "practical_reentry": "..."}"""
+{"minimal": "...", "honest": "...", "practical_reentry": "...", "tone_warnings": [...], "promise_warnings": [...], "confidence": "low|medium|high", "confidence_reason": "..."}"""
 
 
 class Drafter:
     def __init__(self, api_key=None):
-        key = api_key or os.environ.get("GEMINI_API_KEY", "")
+        key = api_key or os.environ.get("ANTHROPIC_API_KEY", "")
         if not key:
             raise ValueError(
-                "[DRAFTER] No GEMINI_API_KEY found. "
+                "[DRAFTER] No ANTHROPIC_API_KEY found. "
                 "Set it in commshubproject/.env before running."
             )
-        self.client = genai.Client(api_key=key)
-        self.model_name = "gemini-2.5-pro"
+        self.client = anthropic.Anthropic(api_key=key)
+        self.model_name = "claude-sonnet-4-6"
 
     def draft_reply(self, redacted_text, silence_days=0, contact_token="UNKNOWN"):
         payload = json.dumps({
@@ -750,14 +800,13 @@ class Drafter:
             "contact_token": contact_token,
         })
         try:
-            response = self.client.models.generate_content(
+            response = self.client.messages.create(
                 model=self.model_name,
-                contents=payload,
-                config=genai.types.GenerateContentConfig(
-                    system_instruction=_SYSTEM_PROMPT,
-                ),
+                max_tokens=1024,
+                system=_SYSTEM_PROMPT,
+                messages=[{"role": "user", "content": payload}]
             )
-            output = response.text.strip()
+            output = response.content[0].text.strip()
             if "```json" in output:
                 output = output.split("```json")[1].split("```")[0].strip()
             elif "```" in output:
@@ -920,11 +969,13 @@ import subprocess
 
 def _send_via_applescript(handle, body):
     """Send an iMessage using osascript directly — no macpymessenger dependency."""
+    safe_handle = handle.replace("\\", "\\\\").replace('"', '\\"')
+    safe_body = body.replace("\\", "\\\\").replace('"', '\\"')
     script = f'''
 tell application "Messages"
     set targetService to 1st service whose service type = iMessage
-    set targetBuddy to buddy "{handle}" of targetService
-    send "{body}" to targetBuddy
+    set targetBuddy to buddy "{safe_handle}" of targetService
+    send "{safe_body}" to targetBuddy
 end tell
 '''
     result = subprocess.run(["osascript", "-e", script], capture_output=True, text=True)
@@ -1424,6 +1475,120 @@ def test_milestone_1_acceptance():
     print("[ACCEPTANCE] Milestone 1 test PASSED.")
 </file>
 
+<file path="tests/test_bridge.py">
+import pytest
+from unittest.mock import patch, MagicMock
+from fastapi.testclient import TestClient
+from commshub_bridge import app
+
+client = TestClient(app)
+MOCK_TARGET = "commshub_bridge._send_via_applescript"
+
+
+def test_health():
+    resp = client.get("/health")
+    assert resp.status_code == 200
+    assert resp.json() == {"ok": True}
+
+
+def test_valid_handle_sends():
+    with patch(MOCK_TARGET) as mock_send:
+        resp = client.post("/send-message", json={
+            "handle": "molly.dougall@icloud.com",
+            "message": "Hello xx",
+            "mode": "test",
+        })
+    assert resp.status_code == 200
+    assert resp.json() == {"ok": True}
+    mock_send.assert_called_once_with("molly.dougall@icloud.com", "Hello xx")
+
+
+def test_valid_dad_handle_sends():
+    with patch(MOCK_TARGET) as mock_send:
+        resp = client.post("/send-message", json={
+            "handle": "drarvinddougall@gmail.com",
+            "message": "Hi xx",
+            "mode": "test",
+        })
+    assert resp.status_code == 200
+    assert resp.json() == {"ok": True}
+    mock_send.assert_called_once()
+
+
+def test_case_insensitive_handle_accepted():
+    with patch(MOCK_TARGET) as mock_send:
+        resp = client.post("/send-message", json={
+            "handle": "MOLLY.DOUGALL@ICLOUD.COM",
+            "message": "Hi xx",
+            "mode": "test",
+        })
+    assert resp.status_code == 200
+    assert resp.json() == {"ok": True}
+    mock_send.assert_called_once()
+
+
+def test_handle_not_in_allow_list():
+    with patch(MOCK_TARGET) as mock_send:
+        resp = client.post("/send-message", json={
+            "handle": "notallowed@example.com",
+            "message": "Hi",
+            "mode": "test",
+        })
+    assert resp.status_code == 400
+    assert resp.json() == {"ok": False, "error": "handle not in allow-list"}
+    mock_send.assert_not_called()
+
+
+def test_empty_message_rejected():
+    with patch(MOCK_TARGET) as mock_send:
+        resp = client.post("/send-message", json={
+            "handle": "molly.dougall@icloud.com",
+            "message": "   ",
+            "mode": "test",
+        })
+    assert resp.status_code == 400
+    assert resp.json() == {"ok": False, "error": "message is required"}
+    mock_send.assert_not_called()
+
+
+def test_missing_handle_rejected():
+    with patch(MOCK_TARGET) as mock_send:
+        resp = client.post("/send-message", json={
+            "handle": "",
+            "message": "Hi",
+            "mode": "test",
+        })
+    assert resp.status_code == 400
+    assert resp.json() == {"ok": False, "error": "handle is required"}
+    mock_send.assert_not_called()
+
+
+def test_applescript_runtime_error_returns_500():
+    with patch(MOCK_TARGET, side_effect=RuntimeError("osascript failed")):
+        resp = client.post("/send-message", json={
+            "handle": "molly.dougall@icloud.com",
+            "message": "Hi xx",
+            "mode": "test",
+        })
+    assert resp.status_code == 500
+    body = resp.json()
+    assert body["ok"] is False
+    assert "osascript failed" in body["error"]
+
+
+def test_message_with_quotes_does_not_crash():
+    """Regression: message containing double-quotes must not break AppleScript escaping."""
+    with patch(MOCK_TARGET) as mock_send:
+        resp = client.post("/send-message", json={
+            "handle": "molly.dougall@icloud.com",
+            "message": 'She said "hello" to me',
+            "mode": "test",
+        })
+    assert resp.status_code == 200
+    assert resp.json() == {"ok": True}
+    mock_send.assert_called_once_with("molly.dougall@icloud.com", 'She said "hello" to me')
+</file>
+
 <file path="tests/test_digest.py">
 import time
 from unittest.mock import MagicMock
@@ -1501,26 +1666,26 @@ DUMMY_KEY = "test-key-000000000000000000000000"
 
 
 def _make_drafter():
-    """Instantiate Drafter with a dummy key, patching genai.Client so no real connection is made."""
-    with patch("src.drafter.genai.Client"):
+    """Instantiate Drafter with a dummy key, patching anthropic.Anthropic so no real connection is made."""
+    with patch("src.drafter.anthropic.Anthropic"):
         return Drafter(api_key=DUMMY_KEY)
 
 
 def _mock_response(text):
     m = MagicMock()
-    m.text = text
+    m.content = [MagicMock(text=text)]
     return m
 
 
 def test_drafter_model_name():
     drafter = _make_drafter()
-    assert "gemini-2.5-pro" in drafter.model_name
+    assert drafter.model_name == "claude-sonnet-4-6"
 
 
 def test_drafter_returns_three_modes():
     drafter = _make_drafter()
     json_out = '{"minimal": "Hi xx", "honest": "Sorry for silence. Love you xx", "practical_reentry": "Still on for Sunday? xx"}'
-    with patch.object(drafter.client.models, "generate_content", return_value=_mock_response(json_out)):
+    with patch.object(drafter.client.messages, "create", return_value=_mock_response(json_out)):
         result = drafter.draft_reply("test message", silence_days=5)
     assert result["minimal"] == "Hi xx"
     assert result["honest"] == "Sorry for silence. Love you xx"
@@ -1530,14 +1695,14 @@ def test_drafter_returns_three_modes():
 def test_drafter_strips_json_fences():
     drafter = _make_drafter()
     fenced = '```json\n{"minimal": "a", "honest": "b", "practical_reentry": "c"}\n```'
-    with patch.object(drafter.client.models, "generate_content", return_value=_mock_response(fenced)):
+    with patch.object(drafter.client.messages, "create", return_value=_mock_response(fenced)):
         result = drafter.draft_reply("test", silence_days=0)
     assert result["minimal"] == "a"
 
 
 def test_drafter_handles_parse_error_gracefully():
     drafter = _make_drafter()
-    with patch.object(drafter.client.models, "generate_content", return_value=_mock_response("not json at all")):
+    with patch.object(drafter.client.messages, "create", return_value=_mock_response("not json at all")):
         result = drafter.draft_reply("test", silence_days=0)
     assert "Error" in result["minimal"]
     assert "minimal" in result
@@ -1549,11 +1714,11 @@ def test_drafter_passes_silence_days_in_prompt():
     drafter = _make_drafter()
     captured = []
 
-    def capture(model, contents, config=None, **kwargs):
-        captured.append(str(contents))
+    def capture(**kwargs):
+        captured.append(str(kwargs.get("messages", [])))
         return _mock_response('{"minimal": "x", "honest": "y", "practical_reentry": "z"}')
 
-    with patch.object(drafter.client.models, "generate_content", side_effect=capture):
+    with patch.object(drafter.client.messages, "create", side_effect=capture):
         drafter.draft_reply("hi mum", silence_days=14, contact_token="MUM")
 
     assert "14" in captured[0] or "silence" in captured[0].lower()
@@ -1822,7 +1987,7 @@ def test_case_insensitive_handle_matching():
 </file>
 
 <file path=".env.example">
-GEMINI_API_KEY=
+ANTHROPIC_API_KEY=your-key-here
 DB_ENCRYPTION_KEY=
 COMMSHUB_INSTALL_PATH=/Users/okgoogle13/Projects/commshubproject
 </file>
@@ -1836,6 +2001,9 @@ COMMSHUB_INSTALL_PATH=/Users/okgoogle13/Projects/commshubproject
 - After the bridge is verified, test `send-one-message.html` in a normal local browser context and use its Recheck/Send flow there.
 - Use the absolute file path for this workflow file when instructing Claude Code:
   `/Users/okgoogle13/Projects/commshubproject/commshubproject/bridge-workflow.md`
+- Use the latest repomix file as a repo context source when starting any step:
+  `/Users/okgoogle13/Projects/commshubproject/commshubproject/repomix-output.xml`
+- Treat the repomix file as read-only context only. Do not edit it. Make changes in the original repository files.
 
 ## Purpose
 
@@ -1874,10 +2042,10 @@ Use one step at a time.
 
 Recommended operator instructions to Claude Code:
 
-- "Read `bridge-workflow.md` and execute Step 1 only. Follow the framework rules exactly. Stop after the verification section and report status."
-- "Now execute Step 2 only from `bridge-workflow.md`. Stop after verification."
-- "Now execute Step 3 only from `bridge-workflow.md` if Step 1 and Step 2 are fully verified."
-- "Now execute Step 4 only from `bridge-workflow.md` if the bridge is already confirmed working."
+- "Read `/Users/okgoogle13/Projects/commshubproject/commshubproject/bridge-workflow.md` and `/Users/okgoogle13/Projects/commshubproject/commshubproject/repomix-output.xml`, then execute Step 1 only. Follow the framework rules exactly. Stop after the verification section and report status."
+- "Read `/Users/okgoogle13/Projects/commshubproject/commshubproject/bridge-workflow.md` and `/Users/okgoogle13/Projects/commshubproject/commshubproject/repomix-output.xml`, then execute Step 2 only. Stop after verification."
+- "Read `/Users/okgoogle13/Projects/commshubproject/commshubproject/bridge-workflow.md` and `/Users/okgoogle13/Projects/commshubproject/commshubproject/repomix-output.xml`, then execute Step 3 only if Step 1 and Step 2 are fully verified."
+- "Read `/Users/okgoogle13/Projects/commshubproject/commshubproject/bridge-workflow.md` and `/Users/okgoogle13/Projects/commshubproject/commshubproject/repomix-output.xml`, then execute Step 4 only if the bridge is already confirmed working."
 
 ## Step 1 — Plan before building
 
@@ -1903,12 +2071,18 @@ Build the missing local bridge server that allows the Comms Hub artifact to trig
 
 Phase 1 — Inspect
 Read and inspect:
+- /Users/okgoogle13/Projects/commshubproject/commshubproject/repomix-output.xml
 - src/sender.py
 - requirements.txt
 - any existing tests
 - any files referencing 8765, /health, /send-message, FastAPI, uvicorn, flask, express, or HTTP server code
 
+Use the repomix file first to understand current repo structure and likely backend-relevant files.
+Then verify all important assumptions against the actual source files before coding.
+Do not edit the repomix file.
+
 In this phase, determine:
+- what the repomix file says about current repo structure and backend-relevant files
 - whether _send_via_applescript exists
 - its exact function signature
 - whether any backend already exists
@@ -1941,7 +2115,7 @@ Requirements:
   - handle present
   - message non-empty after trim
   - handle in allow-list:
-    {"molly.dougall@icloud.com", "drarvindougall@gmail.com"}
+    {"molly.dougall@icloud.com", "drarvinddougall@gmail.com"}
 - If valid, call the confirmed sender function from src.sender
 - Return:
   - success: {"ok": true}
@@ -1994,9 +2168,13 @@ Prove the bridge works without sending a real iMessage.
 
 Phase 1 — Inspect
 Read:
+- /Users/okgoogle13/Projects/commshubproject/commshubproject/repomix-output.xml
 - src/sender.py
 - commshub_bridge.py
 - any existing test config or test folders
+
+Use repomix as context for file discovery, but verify tests and runtime assumptions against the real files.
+Do not edit the repomix file.
 
 Confirm:
 - exact sender callable used by the bridge
@@ -2060,6 +2238,7 @@ Run one controlled real send through the local bridge.
 
 Phase 1 — Pre-flight
 Before sending anything:
+- re-read /Users/okgoogle13/Projects/commshubproject/commshubproject/repomix-output.xml for repo context if needed, but treat runtime checks and real files as authoritative
 - confirm the server is running
 - confirm /health returns {"ok": true}
 - restate clearly that this step may send a real iMessage
@@ -2122,6 +2301,7 @@ Confirm:
 - current working server command
 - correct venv uvicorn path
 - preferred log path exists or can be created
+- re-check repomix-output.xml for any existing launchd/persistence-related files or conflicting operational setup
 
 Phase 2 — Plan
 Summarise the launchd setup:
@@ -2173,7 +2353,12 @@ Output format:
 
 ```text
 Read /Users/okgoogle13/Projects/commshubproject/commshubproject/bridge-workflow.md
-and execute Step 1 only.
+Read /Users/okgoogle13/Projects/commshubproject/commshubproject/repomix-output.xml
+Then execute Step 1 only.
+
+Use the repomix file for repo context and file discovery.
+Verify all important assumptions against the real files before coding.
+Do not edit the repomix file.
 Follow the framework rules exactly.
 Stop after the verification section and report status.
 ```
@@ -2182,7 +2367,13 @@ Stop after the verification section and report status.
 
 ```text
 Read /Users/okgoogle13/Projects/commshubproject/commshubproject/bridge-workflow.md
-and execute Step 2 only.
+Read /Users/okgoogle13/Projects/commshubproject/commshubproject/repomix-output.xml
+Then execute Step 2 only.
+
+Use the repomix file for repo context and file discovery.
+Verify all important assumptions against the real files before testing.
+Do not edit the repomix file.
+
 Before doing anything, confirm Step 1 status is running-and-verified.
 If it is not, stop immediately and report the actual status.
 Do not proceed.
@@ -2193,7 +2384,11 @@ Stop after the verification section and report status.
 
 ```text
 Read /Users/okgoogle13/Projects/commshubproject/commshubproject/bridge-workflow.md
-and execute Step 3 only.
+Read /Users/okgoogle13/Projects/commshubproject/commshubproject/repomix-output.xml
+Then execute Step 3 only.
+
+Use the repomix file for repo context only.
+Do not edit the repomix file.
 ⚠️ This step will send a real iMessage. Do not proceed unless Step 2 is tests-passing.
 Only proceed if Step 1 is running-and-verified and Step 2 is tests-passing.
 Stop after the verification section and report status.
@@ -2203,24 +2398,231 @@ Stop after the verification section and report status.
 
 ```text
 Read /Users/okgoogle13/Projects/commshubproject/commshubproject/bridge-workflow.md
-and execute Step 4 only.
+Read /Users/okgoogle13/Projects/commshubproject/commshubproject/repomix-output.xml
+Then execute Step 4 only.
+
+Use the repomix file for repo context and discovery of any existing persistence setup.
+Verify against the real files before making changes.
+Do not edit the repomix file.
 Only proceed if the bridge is already confirmed working.
 Stop after the verification section and report status.
 ```
 
 ## Final note
 
-This workflow file should always be referenced by absolute path when used from Claude Code.
+This workflow file and the latest repomix file should always be referenced by absolute path when used from Claude Code.
+</file>
+
+<file path="CLAUDE.md">
+# Comms Hub — CLAUDE.md
+
+Personal macOS Python CLI. Reads iMessage conversations, drafts replies via Gemini AI,
+surfaces them in an interactive terminal digest. Operator approves every send. No automation.
+
+---
+
+## Project roots
+
+| Path | Purpose |
+|------|---------|
+| `/Users/okgoogle13/Projects/commshubproject/commshubproject` | Python CLI root (work from here) |
+| `src/` | Core modules |
+| `tests/` | Pytest suite |
+| `config/` | YAML/JSON config — allow_list, schedule, exemplars, voice rules |
+| `commshub_bridge.py` | FastAPI HTTP bridge for the send-one-message web artifact |
+| `bridge-workflow.md` | Staged build plan for the bridge (reference before editing bridge) |
+| `venv/` | Local virtualenv — always activate before running anything |
+
+---
+
+## Activation
+
+```bash
+cd /Users/okgoogle13/Projects/commshubproject/commshubproject
+source venv/bin/activate
+```
+
+---
+
+## Key commands
+
+```bash
+# Check Full Disk Access (required for chat.db reads)
+bash scripts/fda_check.sh
+
+# Poll iMessage for new inbounds, draft replies
+python -m src.cli watch
+
+# Interactive digest — review drafts, approve sends
+python -m src.cli digest
+
+# Show pending count and last poll time
+python -m src.cli status
+
+# Test redactor + drafter + linter without a real inbound
+python -m src.cli --test-draft "some text here"
+
+# Run full test suite
+python -m pytest tests/ -v
+
+# Start the HTTP bridge (required for web artifact Send button)
+uvicorn commshub_bridge:app --host 127.0.0.1 --port 8765
+```
+
+---
+
+## Architecture
+
+```
+iMessage chat.db
+      ↓
+  watcher.py       — polls chat.db, filters to allow-listed contacts
+      ↓
+  redactor.py      — strips PII before anything leaves the machine
+      ↓
+  drafter.py       — calls Gemini, returns 3 variants: minimal / honest / practical_reentry
+      ↓
+  tracker.py       — SQLite: records inbounds, drafts, sends, silence durations
+      ↓
+  digest.py        — interactive TUI: operator reviews drafts, picks one, confirms
+      ↓
+  sender.py        — AppleScript → Messages.app → real iMessage send
+      ↑
+commshub_bridge.py — FastAPI wrapper around sender._send_via_applescript
+                     used by send-one-message.html artifact via POST /send-message
+```
+
+---
+
+## Allow-listed contacts
+
+Defined in two places — **keep in sync**:
+
+| File | Location |
+|------|----------|
+| `config/allow_list.yaml` | Source of truth for CLI pipeline |
+| `commshub_bridge.py` → `ALLOW_LIST` | Must mirror allow_list.yaml |
+
+**Current contacts:**
+
+| Token | Name | iMessage handle |
+|-------|------|----------------|
+| MUM | Molly Dougall | molly.dougall@icloud.com |
+| DAD | Arvind Dougall | drarvinddougall@gmail.com |
+| LUCY | Lucy Gunner | gunner.lucy@gmail.com |
+
+Operator handle: `jonas.dougall@icloud.com` (Melbourne, Australia/Melbourne)
+
+---
+
+## Hard constraints
+
+- **Full Disk Access required** — watcher.py reads `~/Library/Messages/chat.db` directly. Without FDA, all polls return zero messages silently.
+- **Operator approves every send** — digest.py requires explicit confirmation. There is no auto-send path.
+- **Redaction before AI** — redactor.py runs before drafter.py. Raw message text never reaches Gemini.
+- **Allow-list is the security gate** — commshub_bridge.py rejects any handle not in ALLOW_LIST, regardless of what the artifact sends.
+- **iMessage only** — WhatsApp has no macOS automation API. Deferred indefinitely.
+
+---
+
+## Known gaps
+
+- Group thread sending not implemented (picker in web artifact is honest about this)
+- `--send` flag removed from cli.py — direct send routes through digest or bridge only
+- Reactive pipeline (watcher → digest → send) requires an inbound to exist; initiation uses the web artifact + bridge directly
+
+---
+
+## Environment
+
+`.env` (at project root) must contain:
+
+```
+GEMINI_API_KEY=...
+```
+
+Also loaded from `~/.commshub/.env` if present (takes lower precedence).
+
+---
+
+## Proactive workflow rule
+
+When working on this project, Claude must follow this pattern within any approved task:
+
+1. **Work autonomously** to completion within the current approved scope — do not pause for check-ins mid-task unless a decision point arises that was not covered by the instructions.
+2. **After completing each step**, always state:
+   - What was just done and whether it succeeded
+   - What the next planned step is and **why it comes next** (dependency, verification gate, risk order)
+   - Whether that next step is **safe to proceed automatically** or **requires confirmation** before starting
+3. **Never end passively** (e.g. "Let me know if you'd like me to continue") unless the entire workflow is complete. A partial result is not a stopping point — it is a handoff prompt.
+4. **Confirmation is required before** any step that: writes to production, sends a real message, modifies launchd agents, or deletes data.
+5. **Workflow complete** means: the original goal is met, verified, and the operator has been told what the system can now do that it could not before.
+</file>
+
+<file path="commshub_bridge.py">
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
+from pydantic import BaseModel
+from src.sender import _send_via_applescript
+
+# Mirrors allow_list.yaml — update both if contacts change.
+# Stored as lowercase; incoming handles are normalised with .lower() before lookup.
+ALLOW_LIST = {"molly.dougall@icloud.com", "drarvinddougall@gmail.com", "gunner.lucy@gmail.com", "nishantdougall@gmail.com", "nishant.dougall@icloud.com"}
+
+app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # local bridge only — file:// origin is null origin
+    allow_methods=["GET", "POST"],
+    allow_headers=["*"],
+)
+
+
+class SendRequest(BaseModel):
+    recipient: str = ""  # accepted for artifact compatibility, unused
+    handle: str = ""
+    message: str = ""
+    mode: str = ""  # accepted for artifact compatibility, unused
+
+
+@app.get("/health")
+def health():
+    return {"ok": True}
+
+
+@app.post("/send-message")
+def send_message(req: SendRequest):
+    handle = req.handle.strip()
+    message = req.message.strip()
+    if not handle:
+        return JSONResponse(status_code=400, content={"ok": False, "error": "handle is required"})
+    if not message:
+        return JSONResponse(status_code=400, content={"ok": False, "error": "message is required"})
+    if handle.lower() not in ALLOW_LIST:
+        return JSONResponse(status_code=400, content={"ok": False, "error": "handle not in allow-list"})
+    try:
+        _send_via_applescript(handle, message)
+        return {"ok": True}
+    except RuntimeError as e:
+        return JSONResponse(status_code=500, content={"ok": False, "error": str(e)})
+
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run("commshub_bridge:app", host="127.0.0.1", port=8765, reload=False)
 </file>
 
 <file path="requirements.txt">
-google-genai>=0.1.0
+anthropic
 pyyaml>=6.0
 pytz>=2024.1
 pytest>=8.0
 python-dotenv>=1.0
 imessage-reader>=0.6.1
 macpymessenger>=0.2.0
+fastapi>=0.111.0
+uvicorn>=0.29.0
 </file>
 
 </files>
