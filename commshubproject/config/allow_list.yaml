@@ -26,3 +26,11 @@ allow_list:
     role: friend
     aliases:
       - Lucy
+
+  - name: Nishant Dougall
+    token: NISHANT
+    imessage_handle: nishantdougall@gmail.com
+    imessage_handle_alt: nishant.dougall@icloud.com
+    role: family
+    aliases:
+      - Nishant

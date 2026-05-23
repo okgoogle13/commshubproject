@@ -6,7 +6,7 @@ from src.sender import _send_via_applescript
 
 # Mirrors allow_list.yaml — update both if contacts change.
 # Stored as lowercase; incoming handles are normalised with .lower() before lookup.
-ALLOW_LIST = {"molly.dougall@icloud.com", "drarvinddougall@gmail.com", "gunner.lucy@gmail.com"}
+ALLOW_LIST = {"molly.dougall@icloud.com", "drarvinddougall@gmail.com", "gunner.lucy@gmail.com", "nishantdougall@gmail.com", "nishant.dougall@icloud.com"}
 
 app = FastAPI()
 app.add_middleware(
