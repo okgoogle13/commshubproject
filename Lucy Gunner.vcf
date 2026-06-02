@@ -1,8 +1,0 @@
-BEGIN:VCARD
-VERSION:3.0
-PRODID:-//Apple Inc.//macOS 26.4.1//EN
-N:Gunner;Lucy;;;
-FN:Lucy Gunner
-EMAIL;type=INTERNET;type=pref:gunner.lucy@gmail.com
-TEL;type=pref:+61 421 253 689
-END:VCARD
