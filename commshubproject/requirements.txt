@@ -1,9 +1,8 @@
-anthropic
+### FILE: commshubproject/requirements.txt
+google-generativeai>=0.8.0
 pyyaml>=6.0
 pytz>=2024.1
 pytest>=8.0
 python-dotenv>=1.0
-imessage-reader>=0.6.1
+imessage-reader>=0.8.0
 macpymessenger>=0.2.0
-fastapi>=0.111.0
-uvicorn>=0.29.0

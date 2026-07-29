@@ -1,36 +1,7 @@
-operator:
-  imessage_handle: jonas.dougall@icloud.com
-  timezone: Australia/Melbourne
-  install_path: /Users/okgoogle13/Projects/commshubproject
-
-allow_list:
-  - name: Molly Dougall
-    token: MUM
-    imessage_handle: molly.dougall@icloud.com
-    role: mother
-    aliases:
-      - Mum
-      - Molly
-
-  - name: Daddy Dougall
-    token: DAD
-    imessage_handle: drarvinddougall@gmail.com
-    role: father
-    aliases:
-      - Dad
-      - Arvind
-
-  - name: Lucy Gunner
-    token: LUCY
-    imessage_handle: gunner.lucy@gmail.com
-    role: friend
-    aliases:
-      - Lucy
-
-  - name: Nishant Dougall
-    token: NISHANT
-    imessage_handle: nishantdougall@gmail.com
-    imessage_handle_alt: nishant.dougall@icloud.com
-    role: family
-    aliases:
-      - Nishant
+### FILE: commshubproject/config/allow_list.yaml
+allowed_contacts:
+  - "Mum"
+  - "Dad"
+  - "Partner"
+  - "Sibling"
+  - "Operator"

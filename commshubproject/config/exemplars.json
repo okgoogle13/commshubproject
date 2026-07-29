@@ -1,24 +1,17 @@
+### FILE: commshubproject/config/exemplars.json
 {
-  "exemplars": [
+  "examples": [
     {
-      "label": "re-entry, medium",
-      "text": "Hi Mum & Dad 💕 Miss you and sorry about my poor conduct lately 🙈 Been struggling for a few months, actually, ever since you left !! But today I'm feeling better enough to look at my phone and send you a message, which is a relief and progress ✨ Maybe we can talk tomorrow? How are u? When's the next London trip, & have you decided on India? ✈️ Love you xx"
+      "inbound": "Hey are you coming to dinner on Saturday?",
+      "minimal": "Hey! Saw this — will confirm by Thurs 🙏",
+      "honest": "Hey sorry I dropped off — are you still doing Saturday? I think I can make it.",
+      "practical_reentry": "Hey — Saturday dinner, still on? Can you send me the details again, I lost the thread."
     },
     {
-      "label": "practical, low",
-      "text": "Hi parents. Let me know when you are free to talk. Maybe after you've had lunch UK time? Let me know if that works and I'll call. xx"
-    },
-    {
-      "label": "reset, medium",
-      "text": "I know it's been ages. Brain's been a bit frozen, not my love for you. Thinking of you both xx"
-    },
-    {
-      "label": "minimal, zero",
-      "text": "Hi — am ok, just very in my head lately. Love you both xx"
-    },
-    {
-      "label": "time blindness, low",
-      "text": "I saw this message arrive and then it was somehow three weeks later. I am genuinely not sure what happened. Love you both xx"
+      "inbound": "Did you manage to sort out the forms for the lease?",
+      "minimal": "Hey, working on it. Will have an update tomorrow.",
+      "honest": "Ugh, totally forgot about the forms. Time just disappeared. I'm onto it tonight.",
+      "practical_reentry": "Hey — sorry for the radio silence on the forms. I'm sorting them out now, do you need them by a specific time today?"
     }
   ]
 }

@@ -1,3 +1,4 @@
+<!-- ### FILE: commshubproject/launchd/com.commshub.watcher.plist -->
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
@@ -6,27 +7,14 @@
     <string>com.commshub.watcher</string>
     <key>ProgramArguments</key>
     <array>
-        <string>/Users/okgoogle13/Projects/commshubproject/commshubproject/venv/bin/python</string>
+        <string>/usr/bin/python3</string>
         <string>-m</string>
         <string>src.cli</string>
-        <string>watch</string>
+        <string>--fetch</string>
     </array>
-    <key>WorkingDirectory</key>
-    <string>/Users/okgoogle13/Projects/commshubproject/commshubproject</string>
     <key>StartInterval</key>
-    <integer>3600</integer>
-    <key>EnvironmentVariables</key>
-    <dict>
-        <key>GEMINI_API_KEY</key>
-        <string>PLACEHOLDER_SET_IN_ENV</string>
-        <key>DB_ENCRYPTION_KEY</key>
-        <string>PLACEHOLDER_SET_IN_ENV</string>
-    </dict>
-    <key>StandardOutPath</key>
-    <string>/Users/okgoogle13/.commshub/logs/watcher.log</string>
-    <key>StandardErrorPath</key>
-    <string>/Users/okgoogle13/.commshub/logs/watcher.err</string>
+    <integer>300</integer>
     <key>RunAtLoad</key>
-    <false/>
+    <true/>
 </dict>
 </plist>

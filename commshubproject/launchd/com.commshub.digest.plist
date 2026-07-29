@@ -1,3 +1,4 @@
+<!-- ### FILE: commshubproject/launchd/com.commshub.digest.plist -->
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
@@ -6,13 +7,12 @@
     <string>com.commshub.digest</string>
     <key>ProgramArguments</key>
     <array>
-        <string>/Users/okgoogle13/Projects/commshubproject/commshubproject/venv/bin/python</string>
+        <string>/usr/bin/python3</string>
         <string>-m</string>
         <string>src.cli</string>
-        <string>digest</string>
+        <string>--test-draft</string>
+        <string>Generate Digest</string>
     </array>
-    <key>WorkingDirectory</key>
-    <string>/Users/okgoogle13/Projects/commshubproject/commshubproject</string>
     <key>StartCalendarInterval</key>
     <array>
         <dict>
@@ -23,35 +23,10 @@
         </dict>
         <dict>
             <key>Hour</key>
-            <integer>13</integer>
-            <key>Minute</key>
-            <integer>0</integer>
-        </dict>
-        <dict>
-            <key>Hour</key>
-            <integer>18</integer>
-            <key>Minute</key>
-            <integer>0</integer>
-        </dict>
-        <dict>
-            <key>Hour</key>
-            <integer>21</integer>
+            <integer>17</integer>
             <key>Minute</key>
             <integer>0</integer>
         </dict>
     </array>
-    <key>EnvironmentVariables</key>
-    <dict>
-        <key>GEMINI_API_KEY</key>
-        <string>PLACEHOLDER_SET_IN_ENV</string>
-        <key>DB_ENCRYPTION_KEY</key>
-        <string>PLACEHOLDER_SET_IN_ENV</string>
-    </dict>
-    <key>StandardOutPath</key>
-    <string>/Users/okgoogle13/.commshub/logs/digest.log</string>
-    <key>StandardErrorPath</key>
-    <string>/Users/okgoogle13/.commshub/logs/digest.err</string>
-    <key>RunAtLoad</key>
-    <false/>
 </dict>
 </plist>

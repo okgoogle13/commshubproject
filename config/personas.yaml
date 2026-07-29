@@ -1,0 +1,32 @@
+efficient:
+  label: "Efficient / Dry"
+  rules:
+    - "- No emojis"
+    - "- Lowercase style"
+    - "- Affirmative closures"
+  draft: "i'll be there for dinner. will bring the laundry as requested. see you Sunday. thanks."
+  output: "persona_efficient_v2"
+formal:
+  label: "Formal"
+  rules:
+    - "- Elevated vocabulary"
+    - "- No slang/contractions"
+    - "- Polite closing"
+  draft: "I will certainly attend dinner on Sunday, and I shall bring the laundry from the specified address. Best regards."
+  output: "persona_formal_v1"
+humorous:
+  label: "Humorous"
+  rules:
+    - "- Lighthearted/witty"
+    - "- Playful sarcasm"
+    - "- Keep it friendly"
+  draft: "Sunday dinner? I thought you'd never ask. Expect me and a mountain of laundry. Prepare yourselves!"
+  output: "persona_humorous"
+concise:
+  label: "Concise"
+  rules:
+    - "- Max 5 words"
+    - "- Direct answers"
+    - "- No pleasantries"
+  draft: "Yes. Bringing laundry."
+  output: "persona_concise"
