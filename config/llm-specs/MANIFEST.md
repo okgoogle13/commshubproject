@@ -5,9 +5,9 @@ Profile: llm-specs v1.0.0 (2026-08-03)
 | | |
 |---|---|
 | Canonical source | `/Users/okgoogle13/config/llm-specs` |
-| Canonical commit | `7925143` |
+| Canonical commit | `1d85b92` |
 | File set | `config` |
-| Synced | 2026-08-03 11:34 AEST |
+| Synced | 2026-08-03 11:42 AEST |
 
 **Do not edit these files here.** Change them in the canonical directory, run
 `ops/check.sh`, then `ops/sync.sh --write`. A copy edited in place is a fork.
