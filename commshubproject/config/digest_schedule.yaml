@@ -1,4 +1,0 @@
-### FILE: commshubproject/config/digest_schedule.yaml
-digest_times:
-  - "09:00"
-  - "17:00"
