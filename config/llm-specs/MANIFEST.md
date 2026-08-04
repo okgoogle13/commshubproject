@@ -5,7 +5,7 @@ Profile: llm-specs v1.0.0 (2026-08-04)
 | | |
 |---|---|
 | Canonical source | `/Users/okgoogle13/config/llm-specs` |
-| Canonical commit | `ce791db` |
+| Canonical commit | `11f82b7` |
 | File set | `config` |
 | Synced | 2026-08-04 19:10 AEST |
 

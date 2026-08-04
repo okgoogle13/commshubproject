@@ -61,7 +61,7 @@ Privacy & Security. Every error from this server names which one it needs and wh
 +COMMS can only be delivered by paste. Code can embed it (a derived variant, which
 drifts) or read it from a path (machine-specific). Neither is allowed, so drafting
 happens in a session that already carries +COMMS in its project instructions, and this
-repo defines no tone, personas, or output schema. See `llm-specs/wiring.md`.
+repo defines no tone, personas, or output schema. See `llm-specs/operations.md`.
 
 ## Verification is the point
 

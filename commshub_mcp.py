@@ -16,7 +16,7 @@ this by moving a Python version out from under a virtualenv.
 
 Voice lives nowhere in this file. +COMMS is delivered by paste into a session's
 project instructions; code can only embed it (a derived variant) or read it from
-a machine-specific path. Neither is permitted. See llm-specs/wiring.md.
+a machine-specific path. Neither is permitted. See llm-specs/operations.md.
 """
 
 import json
